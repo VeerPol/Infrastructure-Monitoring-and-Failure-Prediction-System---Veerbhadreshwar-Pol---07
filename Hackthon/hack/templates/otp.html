@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Sender</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800 flex items-center justify-center min-h-screen">
+    <!-- OTP Sender Section -->
+    <div class="bg-white shadow-md rounded-lg p-6 max-w-sm w-full">
+        <h2 class="text-2xl font-bold mb-4 text-center">OTP Verification</h2>
+        <form id="otpForm" class="space-y-4">
+            <!-- Email/Phone Input -->
+            <div>
+                <label for="contact" class="block text-sm font-bold mb-1">Enter Email or Phone</label>
+                <input type="text" id="contact" class="w-full border rounded p-2" placeholder="example@email.com or +1234567890" required>
+            </div>
+
+            <!-- OTP Input -->
+            <div id="otpSection" class="hidden">
+                <label for="otp" class="block text-sm font-bold mb-1">Enter OTP</label>
+                <input type="text" id="otp" class="w-full border rounded p-2" placeholder="123456" maxlength="6" required>
+            </div>
+
+            <!-- Buttons -->
+            <div class="space-y-2">
+                <button type="button" id="sendOtpBtn" class="bg-black text-white w-full py-2 rounded">Send OTP</button>
+                <a href="buttons.html"<button type="button" id="verifyOtpBtn" class="bg-green-600 text-white w-full py-2 rounded hidden">Verify OTP</button></a>
+            </div>
+        </form>
+        <p id="message" class="text-center text-sm text-gray-600 mt-4"></p>
+    </div>
+
+    <script>
+        const sendOtpBtn = document.getElementById('sendOtpBtn');
+        const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+        const otpSection = document.getElementById('otpSection');
+        const message = document.getElementById('message');
+        let generatedOtp = '';
+
+        // Function to generate a random 6-digit OTP
+        function generateOtp() {
+            return Math.floor(100000 + Math.random() * 900000).toString();
+        }
+
+        // Event listener for "Send OTP" button
+        sendOtpBtn.addEventListener('click', () => {
+            const contact = document.getElementById('contact').value.trim();
+
+            if (contact) {
+                generatedOtp = generateOtp();
+                otpSection.classList.remove('hidden');
+                verifyOtpBtn.classList.remove('hidden');
+                sendOtpBtn.classList.add('hidden');
+                message.textContent = `OTP sent to ${contact}. Use this OTP: ${generatedOtp} (For Demo Purposes).`;
+            } else {
+                message.textContent = 'Please enter a valid email or phone number.';
+            }
+        });
+
+        // Event listener for "Verify OTP" button
+        verifyOtpBtn.addEventListener('click', () => {
+            const enteredOtp = document.getElementById('otp').value.trim();
+
+            if (enteredOtp === generatedOtp) {
+                message.textContent = '✅ OTP Verified Successfully!';
+                message.classList.add('text-green-600');
+            } else {
+                message.textContent = '❌ Invalid OTP. Please try again.';
+                message.classList.add('text-red-600');
+            }
+        });
+    </script>
+</body>
+</html>

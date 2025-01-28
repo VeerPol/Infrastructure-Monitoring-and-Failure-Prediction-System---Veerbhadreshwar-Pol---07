@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infrastructure Monitoring</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Ensuring the navbar is sticky */
+        .sticky {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .wraper-main{
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <!-- Header Section -->
+    <header class="bg-black text-white py-4 sticky shadow-md">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Logo and Title -->
+            <div class="flex items-center space-x-2">
+                <img src="image.png" alt="InfrastructureMana Logo" class="w-10 h-10 rounded-full">
+                <h1 class="text-xl font-bold">InfrastructureMana</h1>
+            </div>
+            <!-- Navigation Bar -->
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#" class="hover:underline">Home</a></li>
+                    <li><a href="#dashboard" class="hover:underline">Dashboard</a></li>
+                    <li><a href="#predictions" class="hover:underline">Predictions</a></li>
+                    <li><a href="#about" class="hover:underline">About</a></li>
+                    <li><a href="login.html" class="hover:underline">Login</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Homepage Section -->
+    <section id="home" class="py-8 bg-white">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold mb-4">Welcome to InfrastructureMana</h2>
+            <p class="mb-6">Your one-stop platform for real-time infrastructure monitoring and failure prediction.</p>
+            <h2>Infrastructure management is a critical aspect of modern businesses, ensuring that all technological components work seamlessly together. It involves the administration of hardware, software, networks, and data storage systems. Effective infrastructure management helps in reducing system downtime, improving response times, and enhancing overall efficiency. By proactively monitoring and maintaining these systems, businesses can prevent potential issues before they escalate into major problems. This not only saves time and resources but also ensures a smooth and uninterrupted workflow.
+
+                <h2>One of the primary benefits of infrastructure management is the ability to streamline operations. By automating routine tasks and implementing efficient processes, businesses can reduce the workload on their IT teams. This allows them to focus on more strategic initiatives that drive growth and innovation. Additionally, a well-managed infrastructure can lead to significant cost savings by optimizing resource utilization and reducing the need for expensive emergency repairs.</h2>
+                
+                <h2>Data security is another crucial aspect of infrastructure management. With the increasing number of cyber threats, it is essential to have robust security measures in place to protect sensitive information. Infrastructure management includes regular updates and patches to software and hardware, ensuring that vulnerabilities are addressed promptly. It also involves implementing firewalls, encryption, and other security protocols to safeguard data from unauthorized access.</h2>
+                </h2>
+                <h2>Infrastructure managers play a vital role in maintaining the health of an organization's IT systems. They are responsible for setting up and configuring hardware and software, monitoring system performance, and troubleshooting any issues that arise.</h2> Their expertise ensures that all components of the infrastructure work together harmoniously, providing a stable and reliable environment for business operations. By staying up-to-date with the latest technological advancements, infrastructure managers can also recommend and implement new solutions that enhance efficiency and productivity.</h2>
+                
+               <h2> In conclusion, infrastructure management is essential for the smooth functioning of modern businesses. It encompasses a wide range of activities, from hardware and software maintenance to data security and process optimization.</h2> By investing in effective infrastructure management, organizations can ensure that their IT systems are reliable, secure, and capable of supporting their growth and innovation goals. This not only improves operational efficiency but also provides a competitive edge in today's fast-paced business environment.</h2>
+           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    
+                   <h3 class="font-bold text-lg mb-2">System Health</h3>
+                    <canvas id="systemHealthGraph" style="height: 400px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Monitoring Dashboard -->
+    <section id="dashboard" class="py-8 bg-gray-200">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-4">Monitoring Dashboard</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h3 class="font-bold mb-2">CPU Usage</h3>
+                    <canvas id="cpuGraph"></canvas>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h3 class="font-bold mb-2">Memory Usage</h3>
+                    <canvas id="memoryGraph"></canvas>
+                </div>
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h3 class="font-bold mb-2">Disk Usage</h3>
+                    <canvas id="diskGraph"></canvas>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Failure Prediction Section -->
+    <section id="predictions" class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-4">Failure Predictions</h2>
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <canvas id="predictionGraph"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- About and Contact -->
+    <section id="about" class="py-8 bg-gray-200">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-bold mb-4">About Us</h2>
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <p class="mb-6">InfrastructureMana is built to help businesses keep their systems running smoothly with proactive failure prediction.</p>
+                <form class="bg-white p-6 rounded shadow-md max-w-md mx-auto">
+                    <h3 class="font-bold text-lg mb-4">Contact Us</h3>
+                    <label class="block mb-2 font-bold" for="name">Name</label>
+                    <input type="text" id="name" class="w-full mb-4 border rounded p-2" placeholder="Your Name">
+                    <label class="block mb-2 font-bold" for="email">Email</label>
+                    <input type="email" id="email" class="w-full mb-4 border rounded p-2" placeholder="Your Email">
+                    <label class="block mb-2 font-bold" for="message">Message</label>
+                    <textarea id="message" class="w-full mb-4 border rounded p-2" placeholder="Your Message"></textarea>
+                    <button type="submit" class="bg-black text-white px-4 py-2 rounded">Send</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="backgroundColor bg-black text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 InfrastructureMana. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Graph Data
+        const ctxSystemHealth = document.getElementById('systemHealthGraph').getContext('2d');
+        new Chart(ctxSystemHealth, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                datasets: [{
+                    label: 'System Health',
+                    data: [95, 90, 85, 80, 75],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+        });
+
+        const ctxCPU = document.getElementById('cpuGraph').getContext('2d');
+        new Chart(ctxCPU, {
+            type: 'doughnut',
+            data: {
+                labels: ['Used', 'Free'],
+                datasets: [{
+                    data: [70, 30],
+                    backgroundColor: ['rgb(255, 99, 132)', 'rgb(54, 162, 235)']
+                }]
+            }
+        });
+
+        const ctxMemory = document.getElementById('memoryGraph').getContext('2d');
+        new Chart(ctxMemory, {
+            type: 'bar',
+            data: {
+                labels: ['Used', 'Free'],
+                datasets: [{
+                    label: 'Memory (GB)',
+                    data: [16, 8],
+                    backgroundColor: ['rgb(255, 205, 86)', 'rgb(75, 192, 192)']
+                }]
+            }
+        });
+
+        const ctxDisk = document.getElementById('diskGraph').getContext('2d');
+        new Chart(ctxDisk, {
+            type: 'pie',
+            data: {
+                labels: ['Used', 'Free'],
+                datasets: [{
+                    data: [120, 80],
+                    backgroundColor: ['rgb(153, 102, 255)', 'rgb(255, 159, 64)']
+                }]
+            }
+        });
+
+        const ctxPrediction = document.getElementById('predictionGraph').getContext('2d');
+        new Chart(ctxPrediction, {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Failure Risk (%)',
+                    data: [10, 15, 20, 30],
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.3
+                }]
+            }
+        });
+    </script>
+</body>
+</html>
