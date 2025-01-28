@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Components Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            height: auto; /* Allow content to expand dynamically */
+            overflow-y: auto; /* Enable scrolling */
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <header class="bg-black text-white py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold">Computer Components Dashboard</h1>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Input Table -->
+        <table class="table-auto w-full bg-white shadow-md rounded-lg mb-8">
+            <thead>
+                <tr class="bg-black text-white">
+                    <th class="px-4 py-2">Component Name</th>
+                    <th class="px-4 py-2">Type</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Temperature (°C)</th>
+                    <th class="px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border px-4 py-2"><input type="text" id="componentName" placeholder="Enter Component Name" class="border rounded p-2 w-full"></td>
+                    <td class="border px-4 py-2">
+                        <select id="componentType" class="border rounded p-2 w-full">
+                            <option>Motherboard</option>
+                            <option>Processor</option>
+                            <option>RAM</option>
+                            <option>Storage</option>
+                            <option>Power Supply</option>
+                            <option>Graphics Card</option>
+                            <option>Cooling System</option>
+                        </select>
+                    </td>
+                    <td class="border px-4 py-2">
+                        <select id="componentStatus" class="border rounded p-2 w-full">
+                            <option>Working</option>
+                            <option>Faulty</option>
+                        </select>
+                    </td>
+                    <td class="border px-4 py-2"><input type="number" id="temperature" placeholder="Enter Temperature" class="border rounded p-2 w-full"></td>
+                    <td class="border px-4 py-2"><button id="addComponent" class="bg-green-600 text-white px-4 py-2 rounded">Add</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Components List -->
+        <h2 class="text-xl font-bold mb-4">Components List</h2>
+        <table class="table-auto w-full bg-white shadow-md rounded-lg mb-8">
+            <thead>
+                <tr class="bg-black text-white">
+                    <th class="px-4 py-2">Component Name</th>
+                    <th class="px-4 py-2">Type</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Temperature (°C)</th>
+                    <th class="px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody id="componentsList"></tbody>
+        </table>
+
+        <!-- Bar Graph -->
+        <h2 class="text-xl font-bold mb-4">Components Status Overview</h2>
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <canvas id="componentsChart"></canvas>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 InfraMonitor. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const addComponentButton = document.getElementById("addComponent");
+        const componentsList = document.getElementById("componentsList");
+
+        // Chart.js Data
+        const chartLabels = ["Motherboard", "Processor", "RAM", "Storage", "Power Supply", "Graphics Card", "Cooling System"];
+        const chartData = Array(chartLabels.length).fill(0); // Initialize all values to 0
+
+        // Initialize the Bar Graph
+        const componentsCtx = document.getElementById("componentsChart").getContext("2d");
+        const componentsChart = new Chart(componentsCtx, {
+            type: "bar",
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: "Temperature (°C)",
+                    data: chartData,
+                    backgroundColor: "#4CAF50",
+                    borderColor: "#388E3C",
+                    borderWidth: 1,
+                }],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "top",
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+
+        // Add Component Logic
+        addComponentButton.addEventListener("click", () => {
+            const componentName = document.getElementById("componentName").value.trim();
+            const componentType = document.getElementById("componentType").value;
+            const componentStatus = document.getElementById("componentStatus").value;
+            const temperature = parseFloat(document.getElementById("temperature").value);
+
+            if (componentName && !isNaN(temperature)) {
+                // Add the component to the list
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                    <td class="border px-4 py-2">${componentName}</td>
+                    <td class="border px-4 py-2">${componentType}</td>
+                    <td class="border px-4 py-2">${componentStatus}</td>
+                    <td class="border px-4 py-2">${temperature} °C</td>
+                    <td class="border px-4 py-2">
+                        <button class="deleteComponent bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+                    </td>
+                `;
+                componentsList.appendChild(newRow);
+
+                // Update the chart
+                const index = chartLabels.indexOf(componentType);
+                if (index !== -1) chartData[index] = temperature;
+                componentsChart.update();
+
+                // Add delete functionality
+                newRow.querySelector(".deleteComponent").addEventListener("click", () => {
+                    newRow.remove();
+                    chartData[index] = 0; // Reset the chart data for the component
+                    componentsChart.update();
+                });
+
+                // Clear inputs
+                document.getElementById("componentName").value = "";
+                document.getElementById("temperature").value = "";
+            } else {
+                alert("Please fill in all required fields.");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full viewport height */
+            margin: 0;
+            background-color: #f4f4f4; /* Optional background color */
+        }
+
+        .button-container {
+            text-align: center; /* Center the text inside the container */
+        }
+
+        button {
+            display: block; /* Make each button stack vertically */
+            margin: 10px 0; /* Add margin between buttons */
+            padding: 15px 30px; /* Padding for button size */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Show pointer cursor on hover */
+            border: none; /* Remove default border */
+            border-radius: 5px; /* Rounded corners */
+            background-color: #000000; /* Button color */
+            color: white; /* Text color */
+            transition: background-color 0.3s; /* Animation for hover */
+        }
+
+        button:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        // Create a container div
+        const container = document.createElement('div');
+        container.className = 'button-container';
+
+        // Button data
+        const buttons = [
+            { text: 'Dashboard', link: 'dashboard.html' },
+            { text: 'Server Dashboard', link: 'serverdashboard.html' },
+            { text: 'Computer Dashboard', link: 'computer.html' },
+        ];
+
+        // Create buttons dynamically
+        buttons.forEach(buttonData => {
+            const button = document.createElement('button');
+            button.textContent = buttonData.text;
+
+            // Set the redirection on click
+            button.onclick = () => {
+                window.location.href = buttonData.link;
+            };
+
+            container.appendChild(button);
+        });
+
+        // Append container to the body
+        document.body.appendChild(container);
+    </script>
+</body>
+
+</html>

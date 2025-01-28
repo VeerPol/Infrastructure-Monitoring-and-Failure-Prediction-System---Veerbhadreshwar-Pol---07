@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            height: auto; /* Allow content to define height */
+            overflow-y: auto; /* Enable vertical scrolling */
+        }
+        canvas {
+            max-width: 100%; /* Adjust canvas width */
+            height: auto; /* Adjust canvas height dynamically */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+    <header class="bg-black text-white py-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <h1 class="text-xl font-bold">Server Dashboard</h1>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <!-- Server Input Table -->
+        <table class="table-auto w-full bg-white shadow-md rounded-lg mb-8">
+            <thead>
+                <tr class="bg-black text-white">
+                    <th class="px-4 py-2">Server Name</th>
+                    <th class="px-4 py-2">Server Type</th>
+                    <th class="px-4 py-2">IP Address</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border px-4 py-2"><input type="text" id="serverName" placeholder="Enter Server Name" class="border rounded p-2 w-full"></td>
+                    <td class="border px-4 py-2">
+                        <select id="serverType" class="border rounded p-2 w-full">
+                            <option>Web Server</option>
+                            <option>Database Server</option>
+                            <option>Application Server</option>
+                            <option>File Server</option>
+                        </select>
+                    </td>
+                    <td class="border px-4 py-2"><input type="text" id="ipAddress" placeholder="192.168.1.1" class="border rounded p-2 w-full"></td>
+                    <td class="border px-4 py-2">
+                        <select id="serverStatus" class="border rounded p-2 w-full">
+                            <option>Online</option>
+                            <option>Offline</option>
+                        </select>
+                    </td>
+                    <td class="border px-4 py-2"><button id="addServer" class="bg-green-600 text-white px-4 py-2 rounded">Add</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Server List -->
+        <h2 class="text-xl font-bold mb-4">Server List</h2>
+        <table class="table-auto w-full bg-white shadow-md rounded-lg mb-8">
+            <thead>
+                <tr class="bg-black text-white">
+                    <th class="px-4 py-2">Server Name</th>
+                    <th class="px-4 py-2">Server Type</th>
+                    <th class="px-4 py-2">IP Address</th>
+                    <th class="px-4 py-2">Status</th>
+                    <th class="px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody id="serverList"></tbody>
+        </table>
+
+        <!-- Bar Graph -->
+        <h2 class="text-xl font-bold mb-4">Resource Utilization</h2>
+        <div class="bg-white shadow-md rounded-lg p-4">
+            <canvas id="resourceChart"></canvas>
+        </div>
+    </main>
+
+    <footer class="bg-black text-white py-4">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 InfraMonitor. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        const addServerButton = document.getElementById("addServer");
+        const serverList = document.getElementById("serverList");
+
+        // Chart.js Data
+        const chartLabels = ["CPU Usage (%)", "Memory Usage (GB)", "Network Activity (Mbps)"];
+        const chartData = [30, 10, 200]; // Initial demo values
+
+        // Initialize the Bar Graph
+        const resourceCtx = document.getElementById("resourceChart").getContext("2d");
+        const resourceChart = new Chart(resourceCtx, {
+            type: "bar",
+            data: {
+                labels: chartLabels,
+                datasets: [{
+                    label: "Resource Utilization",
+                    data: chartData,
+                    backgroundColor: ["#4CAF50", "#FFC107", "#F44336"],
+                    borderColor: ["#388E3C", "#FFA000", "#D32F2F"],
+                    borderWidth: 1,
+                }],
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: "top",
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+            },
+        });
+
+        // Add Server Logic
+        addServerButton.addEventListener("click", () => {
+            const serverName = document.getElementById("serverName").value.trim();
+            const serverType = document.getElementById("serverType").value;
+            const ipAddress = document.getElementById("ipAddress").value.trim();
+            const serverStatus = document.getElementById("serverStatus").value;
+
+            if (serverName && ipAddress) {
+                // Create new row for the server list
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                    <td class="border px-4 py-2">${serverName}</td>
+                    <td class="border px-4 py-2">${serverType}</td>
+                    <td class="border px-4 py-2">${ipAddress}</td>
+                    <td class="border px-4 py-2">${serverStatus}</td>
+                    <td class="border px-4 py-2">
+                        <button class="deleteServer bg-red-600 text-white px-4 py-2 rounded">Delete</button>
+                    </td>
+                `;
+                serverList.appendChild(newRow);
+
+                // Add random data to the chart
+                chartData[0] = Math.floor(Math.random() * 100); // Random CPU usage
+                chartData[1] = Math.random() * 32; // Random memory usage (0-32GB)
+                chartData[2] = Math.random() * 1000; // Random network activity (Mbps)
+
+                resourceChart.update();
+
+                // Add delete functionality to the new row
+                newRow.querySelector(".deleteServer").addEventListener("click", () => {
+                    newRow.remove();
+                });
+
+                // Clear input fields
+                document.getElementById("serverName").value = "";
+                document.getElementById("ipAddress").value = "";
+            } else {
+                alert("Please fill in all required fields.");
+            }
+        });
+    </script>
+</body>
+</html>
