@@ -13,19 +13,37 @@
             top: 0;
             z-index: 50;
         }
-        .wraper-main{
-            width: 100%;
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .grid-cols-3 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+        }
+        @media (max-width: 480px) {
+            .grid-cols-3 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+            .text-2xl {
+                font-size: 1.5rem;
+            }
+            .text-xl {
+                font-size: 1.25rem;
+            }
+            .text-lg {
+                font-size: 1.125rem;
+            }
         }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
     <!-- Header Section -->
-    <header class="bg-black text-white py-4 sticky shadow-md">
+    <header class="bg-gray-900 text-gray-100 py-4 sticky shadow-md">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <!-- Logo and Title -->
             <div class="flex items-center space-x-2">
-                <img src="image.png" alt="InfrastructureMana Logo" class="w-10 h-10 rounded-full">
-                <h1 class="text-xl font-bold">InfrastructureMana</h1>
+                <img src="image.png" alt="InfrastructureManagement Logo" class="w-10 h-10 rounded-full">
+                <h1 class="text-xl font-bold">InfrastructureManagement</h1>
             </div>
             <!-- Navigation Bar -->
             <nav>
@@ -40,25 +58,15 @@
         </div>
     </header>
 
-    <!-- Homepage Section -->
-    <section id="home" class="py-8 bg-white">
+    <!-- Homepage Section with Background Image -->
+    <section id="home" class="py-8 text-white" style="background-image: url('pexels-pixabay-459728.jpg');background: cover; background-repeat :no-repeat;background: size 100% 100%;background-position: center;">
         <div class="container mx-auto px-4 text-center">
-            <h2 class="text-2xl font-bold mb-4">Welcome to InfrastructureMana</h2>
+            <h2 class="text-2xl font-bold mb-4">Welcome to InfrastructureManagement</h2>
             <p class="mb-6">Your one-stop platform for real-time infrastructure monitoring and failure prediction.</p>
-            <h2>Infrastructure management is a critical aspect of modern businesses, ensuring that all technological components work seamlessly together. It involves the administration of hardware, software, networks, and data storage systems. Effective infrastructure management helps in reducing system downtime, improving response times, and enhancing overall efficiency. By proactively monitoring and maintaining these systems, businesses can prevent potential issues before they escalate into major problems. This not only saves time and resources but also ensures a smooth and uninterrupted workflow.
-
-                <h2>One of the primary benefits of infrastructure management is the ability to streamline operations. By automating routine tasks and implementing efficient processes, businesses can reduce the workload on their IT teams. This allows them to focus on more strategic initiatives that drive growth and innovation. Additionally, a well-managed infrastructure can lead to significant cost savings by optimizing resource utilization and reducing the need for expensive emergency repairs.</h2>
-                
-                <h2>Data security is another crucial aspect of infrastructure management. With the increasing number of cyber threats, it is essential to have robust security measures in place to protect sensitive information. Infrastructure management includes regular updates and patches to software and hardware, ensuring that vulnerabilities are addressed promptly. It also involves implementing firewalls, encryption, and other security protocols to safeguard data from unauthorized access.</h2>
-                </h2>
-                <h2>Infrastructure managers play a vital role in maintaining the health of an organization's IT systems. They are responsible for setting up and configuring hardware and software, monitoring system performance, and troubleshooting any issues that arise.</h2> Their expertise ensures that all components of the infrastructure work together harmoniously, providing a stable and reliable environment for business operations. By staying up-to-date with the latest technological advancements, infrastructure managers can also recommend and implement new solutions that enhance efficiency and productivity.</h2>
-                
-               <h2> In conclusion, infrastructure management is essential for the smooth functioning of modern businesses. It encompasses a wide range of activities, from hardware and software maintenance to data security and process optimization.</h2> By investing in effective infrastructure management, organizations can ensure that their IT systems are reliable, secure, and capable of supporting their growth and innovation goals. This not only improves operational efficiency but also provides a competitive edge in today's fast-paced business environment.</h2>
-           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div class="bg-white shadow-md rounded-lg p-6">
-                    
-                   <h3 class="font-bold text-lg mb-2">System Health</h3>
-                    <canvas id="systemHealthGraph" style="height: 400px;"></canvas>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white bg-opacity-80 shadow-md rounded-lg p-6">
+                    <h3 class="font-bold text-lg mb-2 text-gray-800">System Health</h3>
+                    <canvas id="systemHealthGraph" style="height: 5000px;"></canvas>
                 </div>
             </div>
         </div>
@@ -109,14 +117,14 @@
                     <input type="email" id="email" class="w-full mb-4 border rounded p-2" placeholder="Your Email">
                     <label class="block mb-2 font-bold" for="message">Message</label>
                     <textarea id="message" class="w-full mb-4 border rounded p-2" placeholder="Your Message"></textarea>
-                    <button type="submit" class="bg-black text-white px-4 py-2 rounded">Send</button>
+                    <button type="submit" class="bg-gray-900 text-gray-100 px-4 py-2 rounded">Send</button>
                 </form>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="backgroundColor bg-black text-white py-4">
+    <footer class="bg-gray-900 text-gray-100 py-4">
         <div class="container mx-auto px-4 text-center">
             <p>&copy; 2025 InfrastructureMana. All rights reserved.</p>
         </div>

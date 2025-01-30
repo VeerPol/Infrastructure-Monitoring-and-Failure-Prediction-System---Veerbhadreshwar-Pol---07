@@ -22,6 +22,7 @@
                     <th class="px-4 py-2">Machine Name</th>
                     <th class="px-4 py-2">Machine Type</th>
                     <th class="px-4 py-2">Description</th>
+                    <th class="px-4 py-2">Component</th>
                     <th class="px-4 py-2">Temperature (°C)</th>
                     <th class="px-4 py-2">Damage (%)</th>
                     <th class="px-4 py-2">Quality</th>
@@ -39,10 +40,24 @@
                         </select>
                     </td>
                     <td class="border px-4 py-2"><textarea id="description" placeholder="Enter Description" class="border rounded p-2 w-full"></textarea></td>
+                    <td class="border px-4 py-2">
+                        <select id="component" class="border rounded p-2 w-full">
+                            <option>Belt</option>
+                            <option>Bearing</option>
+                            <option>Plates</option>
+                            <option>Coils</option>
+                            <option>Gear</option>
+                            <option>Valve</option>
+                            <option>Compressor</option>
+                            <option>Pulley</option>
+                            <option>Spring</option>
+                            <option>Fan</option>
+                        </select>
+                    </td>
                     <td class="border px-4 py-2"><input type="number" id="temperature" value="0" class="border rounded p-2 w-full"></td>
                     <td class="border px-4 py-2"><input type="number" id="damage" value="100" class="border rounded p-2 w-full"></td>
                     <td class="border px-4 py-2" id="quality">Excellent</td>
-                    <td class="border px-4 py-2"><button id="addMachine" class="bg-green-600 text-white px-4 py-2 rounded">Done</button></td>
+                    <td class="border px-4 py-2"><button id="addMachine" class="bg-green-600 text-white px-4 py-2 rounded">Add</button></td>
                 </tr>
             </tbody>
         </table>
@@ -55,6 +70,7 @@
                     <th class="px-4 py-2">Machine Name</th>
                     <th class="px-4 py-2">Machine Type</th>
                     <th class="px-4 py-2">Description</th>
+                    <th class="px-4 py-2">Component</th>
                     <th class="px-4 py-2">Temperature (°C)</th>
                     <th class="px-4 py-2">Damage (%)</th>
                     <th class="px-4 py-2">Quality</th>
@@ -79,12 +95,10 @@
         const addMachineButton = document.getElementById("addMachine");
         const taskList = document.getElementById("taskList");
 
-        // Data for Chart.js
         const machineNames = [];
         const temperatures = [];
         const damages = [];
 
-        // Initialize the Chart
         const ctx = document.getElementById("machineChart").getContext("2d");
         const machineChart = new Chart(ctx, {
             type: "bar",
@@ -110,84 +124,80 @@
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        position: "top",
-                    },
+                    legend: { position: "top" },
                 },
             },
         });
 
-        // Function to calculate quality based on damage
         function calculateQuality(damage) {
-            if (damage >= 80) {
-                return "Excellent";
-            } else if (damage >= 50) {
-                return "Action Required";
-            } else {
-                return "Quick Action Required";
+            if (damage >= 80) return "Excellent";
+            if (damage >= 50) return "Action Required";
+            return "Quick Action Required";
+        }
+
+        function handleComponentEffect(component, damage, temperatureCell) {
+            if (component === "Bearing") {
+                const increment = Math.floor(Math.random() * 5) + 1;
+                const currentTemp = parseFloat(temperatureCell.textContent);
+                temperatureCell.textContent = currentTemp + increment;
+            } else if (component === "Belt") {
+                const decrement = Math.floor(Math.random() * 5) + 1;
+                const currentTemp = parseFloat(temperatureCell.textContent);
+                temperatureCell.textContent = Math.max(0, currentTemp - decrement);
             }
         }
 
-        // Decrease damage by 3% every 20 seconds
-        function startDamageReduction(row, damageCell, qualityCell, index) {
+        function startDamageReduction(row, damageCell, temperatureCell, qualityCell, index, component) {
             setInterval(() => {
                 const currentDamage = parseFloat(damageCell.textContent);
                 if (currentDamage > 0) {
-                    const newDamage = Math.max(0, currentDamage - 3);
+                    const reduction = Math.floor(Math.random() * 10) + 1;
+                    const newDamage = Math.max(0, currentDamage - reduction);
                     damageCell.textContent = `${newDamage}%`;
                     qualityCell.textContent = calculateQuality(newDamage);
 
-                    // Update chart data
+                    handleComponentEffect(component, newDamage, temperatureCell);
+
                     damages[index] = newDamage;
                     machineChart.update();
                 }
-            }, 20000);
+            }, 30000);
         }
 
-        // Event listener for adding machine to the task list and chart
         addMachineButton.addEventListener("click", () => {
             const machineName = document.getElementById("machineName").value;
             const machineType = document.getElementById("machineType").value;
             const description = document.getElementById("description").value;
+            const component = document.getElementById("component").value;
             const temperature = parseFloat(document.getElementById("temperature").value);
             const damage = parseFloat(document.getElementById("damage").value);
-            const quality = calculateQuality(damage);
 
             if (machineName.trim() && description.trim()) {
-                // Add a new row to the task list table
+                const quality = calculateQuality(damage);
+
                 const newRow = document.createElement("tr");
                 newRow.innerHTML = `
                     <td class="border px-4 py-2">${machineName}</td>
                     <td class="border px-4 py-2">${machineType}</td>
                     <td class="border px-4 py-2">${description}</td>
-                    <td class="border px-4 py-2">${temperature} °C</td>
+                    <td class="border px-4 py-2">${component}</td>
+                    <td class="border px-4 py-2">${temperature}</td>
                     <td class="border px-4 py-2">${damage}%</td>
                     <td class="border px-4 py-2">${quality}</td>
-                    <td class="border px-4 py-2">
-                        <button class="deleteTask bg-red-600 text-white px-4 py-2 rounded">Delete</button>
-                    </td>
+                    <td class="border px-4 py-2"><button class="deleteTask bg-red-600 text-white px-4 py-2 rounded">Delete</button></td>
                 `;
                 taskList.appendChild(newRow);
 
-                // Update the chart data
                 machineNames.push(machineName);
                 temperatures.push(temperature);
                 damages.push(damage);
                 machineChart.update();
 
-                // Start reducing damage every 20 seconds
-                const damageCell = newRow.children[4];
-                const qualityCell = newRow.children[5];
-                startDamageReduction(newRow, damageCell, qualityCell, machineNames.length - 1);
+                const damageCell = newRow.children[5];
+                const temperatureCell = newRow.children[4];
+                const qualityCell = newRow.children[6];
+                startDamageReduction(newRow, damageCell, temperatureCell, qualityCell, machineNames.length - 1, component);
 
-                // Reset input fields
-                document.getElementById("machineName").value = "";
-                document.getElementById("machineType").value = "Heavy Machine";
-                document.getElementById("description").value = "";
-                document.getElementById("temperature").value = "0";
-                document.getElementById("damage").value = "100";
-
-                // Add event listener to the delete button
                 newRow.querySelector(".deleteTask").addEventListener("click", () => {
                     const index = Array.from(taskList.children).indexOf(newRow);
                     machineNames.splice(index, 1);
@@ -196,8 +206,15 @@
                     machineChart.update();
                     newRow.remove();
                 });
+
+                document.getElementById("machineName").value = "";
+                document.getElementById("machineType").value = "Heavy Machine";
+                document.getElementById("description").value = "";
+                document.getElementById("component").value = "Belt";
+                document.getElementById("temperature").value = "0";
+                document.getElementById("damage").value = "100";
             } else {
-                alert("Please fill in all fields before adding to the task list.");
+                alert("Please fill in all fields.");
             }
         });
     </script>
